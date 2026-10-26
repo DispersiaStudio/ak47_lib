@@ -13,15 +13,20 @@ if Config.Clothing == 'auto' then
         'codem-apperance',
         'esx_skin',
     }
-    CreateThread(function()
-        for _, script in pairs(scripts) do
+    local function resolveClothing()
+        for _, script in ipairs(scripts) do
             if GetResourceState(script) == 'started' then
                 Config.Clothing = script
-                print(string.format("^2['CLOTHING']: %s^0", Config.Clothing))
-                return
+                print(string.format("^2['CLOTHING']: %s^0", script))
+                return true
             end
         end
+        return false
+    end
+    AddEventHandler('onClientResourceStart', function()
+        if Config.Clothing == 'auto' then resolveClothing() end
     end)
+    CreateThread(resolveClothing)
 end
 
 Lib47.IsMpMale = function()
